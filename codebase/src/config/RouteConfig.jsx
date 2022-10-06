@@ -8,7 +8,7 @@ export const RouteConfig = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/:id" element={<HouseDetails />} />
-      <Route path="/character" element={<Character />} />
+      <Route path="/character/:id" element={<Character />} />
     </Routes>
   );
 };
