@@ -32,7 +32,7 @@ const HouseDetails = () => {
     content = <Loader />;
   } else if (isSuccess) {
     content = (
-      <div className="z-10 my-20 flex h-[20rem] w-[30rem]  flex-col justify-center rounded-2xl bg-white bg-blue-900/70 p-10 text-center text-white">
+      <div className="z-10 my-40 flex h-[20rem] w-[20rem] flex-col justify-center  rounded-2xl bg-white bg-blue-900/70 p-10 text-center text-white md:my-20 lg:w-[30rem]">
         <h1 className="text-2xl font-semibold ">{HouseDetails?.name}</h1>
         <h1 className="my-4 text-3xl font-light">
           &ldquo;{HouseDetails?.words || 'The winter swept us away'}.&rdquo;
@@ -60,11 +60,11 @@ const HouseDetails = () => {
 
       {content}
       {characters.length > 0 && (
-        <div className="z-10 flex w-full  flex-col items-start px-10">
-          <h1 className="text-4xl font-light tracking-[-1.2px] text-white">
+        <div className="z-10 flex w-full  flex-col items-start lg:px-10">
+          <h1 className="w-full text-center text-4xl font-light tracking-[-1.2px] text-white md:text-left">
             Sworned Members
           </h1>
-          <div className="flex h-fit flex-wrap justify-start justify-items-center gap-2 py-10">
+          <div className="flex h-fit flex-wrap justify-center justify-items-center gap-2 py-10 lg:justify-start">
             {characters.map((id) => (
               <CharacterCard key={id} id={id} />
             ))}
