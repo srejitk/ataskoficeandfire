@@ -7,17 +7,9 @@ export const houseSlice = createApi({
   }),
   endpoints: (builder) => ({
     getHouses: builder.query({
-      query: () => '/houses?page=1&pageSize=50',
+      query: (pageNo) => `/houses?page=${pageNo}`,
       transformResponse: (responseData) => {
-        let loadedPosts = responseData.map((house) => {
-          let id = house.url.slice(45);
-          house.id = id;
-          return house;
-        });
-
-        loadedPosts = loadedPosts.filter(
-          (house) => house.words !== '' || house.swornMembers.length !== 0
-        );
+        let loadedPosts = responseData.sort((a, b) => a.name - b.name);
         return loadedPosts;
       },
     }),

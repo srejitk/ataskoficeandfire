@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useGetHousesQuery } from '../../features/api/apiSlice';
 import { IMAGES } from '../../utils/constants';
 import Banner from '../Banner/Banner';
@@ -7,7 +7,44 @@ import Loader from '../Loader';
 import Posts from '../Posts';
 
 export const Houses = () => {
-  const { data, isLoading, isSuccess } = useGetHousesQuery();
+  const loadingRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [list, setList] = useState([]);
+  const [pageNum, setPageNum] = useState([]);
+  const { data, isLoading, isSuccess } = useGetHousesQuery(currentPage, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const combinedData = useCallback(() => {
+    if (isLoading) return;
+    if (currentPage > 0 && isSuccess) {
+      setPageNum((page) => [...page, currentPage]);
+      console.log(currentPage);
+      setList((list) => [...list, ...data]);
+    }
+  }, [currentPage, isSuccess]);
+
+  useEffect(() => {
+    combinedData();
+  }, [combinedData]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage((page) => page + 1);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (loadingRef.current) observer.observe(loadingRef.current);
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [loadingRef]);
+
   let content;
 
   if (isLoading) content = <Loader />;
@@ -30,9 +67,9 @@ export const Houses = () => {
           Houses
         </h1>
         <div className=" grid h-fit w-full grid-cols-[repeat(3,minmax(20rem,1fr))] grid-rows-[repeat(3,minmax(15rem,1fr))] justify-start gap-4  py-10">
-          {data?.map((house) => (
-            <Posts key={house.id} house={house} />
-          ))}
+          {list?.map((house) => {
+            return <Posts key={house.url} house={house} />;
+          })}
         </div>
       </div>
     );
@@ -41,6 +78,9 @@ export const Houses = () => {
       <Banner src={IMAGES.FIRE_AND_ICE} />
       <GradientBox />
       {content}
+      <div ref={loadingRef}>
+        <div className="h-10 w-10 animate-pulse rounded-full bg-white"></div>
+      </div>
     </div>
   );
 };
