@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Posts = ({ house: { id, name } }) => {
+const Posts = ({ house: { url, name } }) => {
+  let id = url.slice(45);
   return (
     <Link key={id} to={`/${id}`}>
       <div className="text-gray group relative col-span-1 m-1 flex h-[15rem] w-full  cursor-pointer flex-col items-center justify-center  rounded-lg  border-2  border-transparent    p-10 px-6 text-center  text-white hover:border-t-2 hover:border-white/20 hover:shadow-xl hover:shadow-yellow-500/20">
