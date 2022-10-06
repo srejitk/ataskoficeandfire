@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FiArrowLeftCircle } from 'react-icons/fi';
 import { Link, useLocation } from 'react-router-dom';
-import { useGetHouseQuery } from '../../features/api/apiSLice';
+import { useGetHouseQuery } from '../../features/api/apiSlice';
+
 import { IMAGES } from '../../utils/constants';
 import Banner from '../Banner/Banner';
 import CharacterCard from '../CharacterCard';
