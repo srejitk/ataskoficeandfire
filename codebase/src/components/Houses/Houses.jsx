@@ -1,49 +1,19 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useGetHousesQuery } from '../../features/api/apiSlice';
+import React, { useState, useRef } from 'react';
 import { IMAGES } from '../../utils/constants';
 import Banner from '../Banner/Banner';
 import GradientBox from '../GradientBox';
 import Loader from '../Loader';
 import Posts from '../Posts';
+import { useInfiniteScrolling } from '../../utils/useInfiniteScrolling';
 
 export const Houses = () => {
   const loadingRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const [list, setList] = useState([]);
-  const [pageNum, setPageNum] = useState([]);
-  const { data, isLoading, isSuccess } = useGetHousesQuery(currentPage, {
-    refetchOnMountOrArgChange: true,
-  });
-
-  const combinedData = useCallback(() => {
-    if (isLoading) return;
-    if (currentPage > 0 && isSuccess) {
-      setPageNum((page) => [...page, currentPage]);
-      console.log(currentPage);
-      setList((list) => [...list, ...data]);
-    }
-  }, [currentPage, isSuccess]);
-
-  useEffect(() => {
-    combinedData();
-  }, [combinedData]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setCurrentPage((page) => page + 1);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (loadingRef.current) observer.observe(loadingRef.current);
-    return () => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-    };
-  }, [loadingRef]);
+  const { isLoading, isSuccess, data } = useInfiniteScrolling(
+    currentPage,
+    setCurrentPage,
+    loadingRef
+  );
 
   let content;
 
@@ -67,7 +37,7 @@ export const Houses = () => {
           Houses
         </h1>
         <div className=" grid h-fit w-full grid-cols-[repeat(3,minmax(20rem,1fr))] grid-rows-[repeat(3,minmax(15rem,1fr))] justify-start gap-4  py-10">
-          {list?.map((house) => {
+          {data?.map((house) => {
             return <Posts key={house.url} house={house} />;
           })}
         </div>
