@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useGetCharacterQuery } from '../../features/api/characterSlice';
 import { IMAGES } from '../../utils/constants';
 import Banner from '../Banner/Banner';
+import ErrorText from '../ErrorText';
 import GradientBox from '../GradientBox';
 import Loader from '../Loader';
 import Row from '../Row';
@@ -21,7 +22,7 @@ export const CharacterData = () => {
 
   let content;
   if (isLoading) content = <Loader />;
-  if (isError) content = 'Error';
+  if (isError) content = <ErrorText />;
   if (isSuccess)
     content = (
       <div className="z-10 my-40 flex h-fit min-h-[20rem] w-[20rem] flex-col justify-center  rounded-2xl bg-white bg-blue-900/70 p-10 text-center text-white drop-shadow-lg lg:my-20 lg:w-[30rem]">
@@ -44,10 +45,10 @@ export const CharacterData = () => {
       <Banner src={IMAGES.ICE} />
       <GradientBox />
       {content}
-      {CharacterData?.titles?.length > 0 && (
-        <div className="z-10 flex w-full  flex-col items-start px-10">
+      {CharacterData?.titles?.length > 0 && isSuccess && (
+        <div className="z-10 mt-auto flex w-full  flex-col items-start px-10">
           <h1 className="text-4xl font-light tracking-[-1.2px] text-white">
-            Titles Held
+            {CharacterData?.titles?.length === 0 ? '' : 'Titles Held'}
           </h1>
           <div className="flex h-fit flex-wrap justify-start justify-items-center gap-2 py-10">
             {CharacterData.titles?.map((title) => (

@@ -6,6 +6,7 @@ import { useGetHouseQuery } from '../../features/api/apiSlice';
 import { IMAGES } from '../../utils/constants';
 import Banner from '../Banner/Banner';
 import CharacterCard from '../CharacterCard';
+import ErrorText from '../ErrorText';
 import GradientBox from '../GradientBox';
 import Loader from '../Loader';
 
@@ -42,9 +43,7 @@ const HouseDetails = () => {
       </div>
     );
   } else if (isError) {
-    content = (
-      <div className=" text-3xl font-medium  text-red-600">ERRORRR</div>
-    );
+    content = <ErrorText />;
   }
 
   return (
