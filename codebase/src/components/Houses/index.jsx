@@ -6,11 +6,12 @@ import Loader from '../Loader';
 import Posts from '../Posts';
 import { useInfiniteScrolling } from '../../utils/useInfiniteScrolling';
 import { FiArrowUpCircle } from 'react-icons/fi';
+import ErrorText from '../ErrorText';
 
 export const Houses = () => {
   const loadingRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const { isLoading, isSuccess, data } = useInfiniteScrolling(
+  const { isLoading, isSuccess, data, isError } = useInfiniteScrolling(
     currentPage,
     setCurrentPage,
     loadingRef
@@ -27,6 +28,7 @@ export const Houses = () => {
   let content;
 
   if (isLoading) content = <Loader />;
+  if (isError) content = <ErrorText />;
   if (isSuccess)
     content = (
       <div className="relative z-10 flex w-full  flex-col items-start px-10 pt-10">
@@ -54,7 +56,7 @@ export const Houses = () => {
         <h1 className="w-full text-center text-4xl font-light tracking-[-1.2px] text-white md:text-left">
           Houses
         </h1>
-        <div className=" grid h-fit w-full justify-center gap-4 py-10 lg:grid-cols-[repeat(3,minmax(20rem,1fr))] lg:grid-rows-[repeat(3,minmax(15rem,1fr))]  lg:justify-start">
+        <div className=" grid h-fit w-full justify-center gap-4 py-10 lg:grid-cols-[repeat(4,minmax(20rem,1fr))] lg:grid-rows-[repeat(4,minmax(15rem,1fr))]  lg:justify-start">
           {data?.map((house) => {
             return <Posts key={house.url} house={house} />;
           })}
